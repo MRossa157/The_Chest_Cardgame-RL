@@ -84,8 +84,10 @@ class GameBoard():
     def __init__(self, deck: Deck, players: List[Player]) -> None:
         self.deck = deck
         self.players = players
-        self.current_player = self.players[np.random.randint(0, len(self.players))]
-        self.is_switch_player = False
+        
+        self.current_player : Player = self.players[np.random.randint(0, len(self.players))]
+        self.is_switch_player : bool = False
+        self.winner : Player = None
 
         # Именуем пользователей у которых нет имени
         for idx, player in enumerate(self.players):
@@ -136,10 +138,11 @@ class GameBoard():
         self.current_player = next_player
 
     def announce_winner(self, player: Player):
-        print(f'Победил игрок {player.name}! Он собрал {player.chests} сундучков!')
+        self.winner = player
+        print(f'Победил игрок {self.winner.name}! Он собрал {self.winner.chests} сундучков!')
 
     def display_game_status(self, ):
-        print(f'Текущий ход игрока: {self.current_player}')
+        print(f'Текущий ход игрока: {self.current_player.name} [{self.players.index(self.current_player)}]')
     
     def end_game(self, ):
         winner = max(self.players, key=lambda player: player.chests)
@@ -154,28 +157,16 @@ class GameBoard():
         # Вывод текущего состояния игры
         self.display_game_status()
         
-        if self.is_switch_player:
+        if self.is_switch_player is True:
             self.is_switch_player = False
             self._next_active_player()
 
     def start_game(self):
         self.__deal_cards_to_players()
+        self.update_board()
 
 
 if __name__ == "__main__":  
-    deck = Deck()
-
-    player1 = Player(name='Егорка')
-    player2 = Player()
-
-    game = GameBoard(deck, [player1, player2])
-    game.start_game()
-
-    player1.chests = 3
-    player2.chests = 2
-
-    game.deck.cards = []
-            
-    game.update_board()
+    ...
 
 
