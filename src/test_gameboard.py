@@ -1,9 +1,7 @@
 import pytest
 from models import GameBoard, Deck, Player, Card, Rank, Suit
 
-#TODO Блять ебучий тест написан правильно но почему то не проходится. Я не ебу почему
-
-def test_GameBoard_ask_for_card():
+def test_ask_for_card():
     deck = Deck()
     player1 = Player()
     player2 = Player()
@@ -26,6 +24,25 @@ def test_GameBoard_ask_for_card():
 
     # Т.к. мы забрали карту, то ход не должен передаваться
     assert game.current_player == current_player
+    
+def test_update_board():
+    deck = Deck()
+
+    player1 = Player(name='Егорка')
+    player2 = Player()
+
+    game = GameBoard(deck, [player1, player2])
+    game.start_game()
+
+    player1.chests = 3
+    player2.chests = 2
+
+    game.deck.cards = []
+            
+    game.update_board()
+    
+    assert isinstance(game.winner, Player) == True
+    assert game.winner == player1
     
 if __name__ == '__main__':
     pytest.main()
